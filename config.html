@@ -1,0 +1,113 @@
+<?php
+// set to defaults if undefined
+if (!isset($config->url)) {
+    $config->url = 'https://webservice.telederm.org/cderm/rest/cdermService.svc/checkbenutzerviewws_checkuserisactiveonclient';
+}
+if (!isset($config->verify)) {
+    $config->verify = false;
+}
+if (!isset($config->authenticate)) {
+    $config->authenticate = false;
+}
+?>
+<table cellspacing="0" cellpadding="5" border="0">
+  <tr valign="top" class="required">
+    <td align="right">
+      <label for="url">
+        <?php print_string('auth_teledermurl_key', 'auth_telederm') ?>:
+      </label>
+    </td>
+    <td>
+      <input name="url" id="url" type="text" size="30" value="<?php echo $config->url ?>" />
+      <?php if (isset($err['url'])) { echo $OUTPUT->error_text($err['url']); } ?>
+    </td>
+    <td>
+      <?php print_string('auth_teledermurl', 'auth_telederm'); ?>
+    </td>
+  </tr>
+  <tr valign="top">
+    <td align="right">
+      <label for="url">
+        <?php print_string('auth_teledermverify_key', 'auth_telederm') ?>:
+      </label>
+    </td>
+    <td>
+      <input name="verify" id="verify" type="checkbox" <?php if ($config->verify == 'on'){ echo 'checked="checked"'; } ?> />
+      <?php if (isset($err['verify'])) { echo $OUTPUT->error_text($err['verify']); } ?>
+    </td>
+    <td>
+      <?php print_string('auth_teledermverify', 'auth_telederm'); ?>
+    </td>
+  </tr>
+  <tr valign="top">
+    <td align="right">
+      <label for="authenticate">
+        <?php print_string('auth_teledermauthenticate_key', 'auth_telederm') ?>:
+      </label>
+    </td>
+    <td>
+      <input name="authenticate" id="authenticate" type="checkbox" <?php if ($config->authenticate == 'on'){ echo 'checked="checked"'; } ?> />
+      <?php if (isset($err['authenticate'])) { echo $OUTPUT->error_text($err['authenticate']); } ?>
+    </td>
+    <td>
+      <?php print_string('auth_teledermauthenticate', 'auth_telederm'); ?>
+    </td>
+  </tr>
+  <tr valign="top">
+    <td align="right">
+      <label for="username">
+        <?php print_string('auth_teledermusername_key', 'auth_telederm') ?>:
+      </label>
+    </td>
+    <td>
+      <input name="username" id="username" type="text" size="30" value="<?php echo $config->username ?>" />
+      <?php if (isset($err['username'])) { echo $OUTPUT->error_text($err['username']); } ?>
+    </td>
+    <td>
+      <?php print_string('auth_teledermusername', 'auth_telederm'); ?>
+    </td>
+  </tr>
+  <tr valign="top">
+    <td align="right">
+      <label for="password">
+        <?php print_string('auth_teledermpassword_key', 'auth_telederm') ?>:
+      </label>
+    </td>
+    <td>
+      <input name="password" id="password" type="text" size="30" value="<?php echo $config->password ?>" />
+      <?php if (isset($err['password'])) { echo $OUTPUT->error_text($err['password']); } ?>
+    </td>
+    <td>
+      <?php print_string('auth_teledermpassword', 'auth_telederm'); ?>
+    </td>
+  </tr>
+  <tr valign="top" class="required">
+    <td align="right">
+      <label for="guid">
+        <?php print_string('auth_teledermguid_key', 'auth_telederm') ?>:
+      </label>
+    </td>
+    <td>
+      <input name="guid" id="guid" type="text" size="30" value="<?php echo $config->guid ?>" />
+      <?php if (isset($err['guid'])) { echo $OUTPUT->error_text($err['guid']); } ?>
+    </td>
+    <td>
+      <?php print_string('auth_teledermguid', 'auth_telederm'); ?>
+    </td>
+  </tr>
+  <tr valign="top" class="required">
+    <td align="right">
+      <label for="key">
+        <?php print_string('auth_teledermkey_key', 'auth_telederm') ?>:
+      </label>
+    </td>
+    <td>
+      <input name="key" id="key" type="text" size="30" value="<?php echo $config->key ?>" />
+      <?php if (isset($err['key'])) { echo $OUTPUT->error_text($err['key']); } ?>
+    </td>
+    <td>
+      <?php print_string('auth_teledermkey', 'auth_telederm'); ?>
+    </td>
+  </tr>
+  <?php print_auth_lock_options($this->authtype, $user_fields, get_string('auth_fieldlocks_help', 'auth'), false, false); ?>
+</table>
