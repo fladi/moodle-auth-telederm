@@ -9,6 +9,18 @@ if (!isset($config->verify)) {
 if (!isset($config->authenticate)) {
     $config->authenticate = false;
 }
+if (!isset($config->username)) {
+    $config->username = '';
+}
+if (!isset($config->password)) {
+    $config->password = '';
+}
+if (!isset($config->guid)) {
+    $config->guid = '';
+}
+if (!isset($config->key)) {
+    $config->key = '';
+}
 ?>
 <table cellspacing="0" cellpadding="5" border="0">
   <tr valign="top" class="required">

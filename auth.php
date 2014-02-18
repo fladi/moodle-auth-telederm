@@ -147,10 +147,16 @@ class auth_plugin_telederm extends auth_plugin_base {
             $config->authenticate = false;
         }
         if (!isset ($config->username)) {
-            $config->username = 'graz';
+            $config->username = '';
         }
         if (!isset ($config->password)) {
-            $config->password = 'password';
+            $config->password = '';
+        }
+        if (!isset ($config->guid)) {
+            $config->guid = '';
+        }
+        if (!isset ($config->key)) {
+            $config->key = '';
         }
 
         // save settings
