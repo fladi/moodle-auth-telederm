@@ -1,7 +1,10 @@
 <?php
 // set to defaults if undefined
-if (!isset($config->url)) {
-    $config->url = 'https://webservice.telederm.org/cderm/rest/cdermService.svc/checkbenutzerviewws_checkuserisactiveonclient';
+if (!isset($config->login)) {
+    $config->login = 'https://webservice.telederm.org/cderm/rest/cdermService.svc/checkbenutzerviewws_checkuserisactiveonclient';
+}
+if (!isset($config->metadata)) {
+    $config->metadata = 'https://webservice.telederm.org/cderm/rest/cdermService.svc/checkbenutzerviewws_getuserdata';
 }
 if (!isset($config->verify)) {
     $config->verify = false;
