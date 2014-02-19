@@ -28,16 +28,30 @@ if (!isset($config->namespace)) {
 <table cellspacing="0" cellpadding="5" border="0">
   <tr valign="top" class="required">
     <td align="right">
-      <label for="url">
-        <?php print_string('auth_teledermurl_key', 'auth_telederm') ?>:
+      <label for="login">
+        <?php print_string('auth_teledermlogin_key', 'auth_telederm') ?>:
       </label>
     </td>
     <td>
-      <input name="url" id="url" type="text" size="30" value="<?php echo $config->url ?>" />
-      <?php if (isset($err['url'])) { echo $OUTPUT->error_text($err['url']); } ?>
+      <input name="login" id="login" type="text" size="30" value="<?php echo $config->login ?>" />
+      <?php if (isset($err['login'])) { echo $OUTPUT->error_text($err['login']); } ?>
     </td>
     <td>
-      <?php print_string('auth_teledermurl', 'auth_telederm'); ?>
+      <?php print_string('auth_teledermlogin', 'auth_telederm'); ?>
+    </td>
+  </tr>
+  <tr valign="top" class="required">
+    <td align="right">
+      <label for="metadata">
+        <?php print_string('auth_teledermmetadata_key', 'auth_telederm') ?>:
+      </label>
+    </td>
+    <td>
+      <input name="metadata" id="metadata" type="text" size="30" value="<?php echo $config->metadata ?>" />
+      <?php if (isset($err['metadata'])) { echo $OUTPUT->error_text($err['metadata']); } ?>
+    </td>
+    <td>
+      <?php print_string('auth_teledermmetadata', 'auth_telederm'); ?>
     </td>
   </tr>
   <tr valign="top">

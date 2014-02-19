@@ -25,8 +25,10 @@
 
 $string['auth_teledermdescription'] = 'This method uses the telederm webservice to determine valid user credentials.';
 $string['auth_teledermnotinstalled'] = 'Cannot use telederm authentication. The PHP curl module is not installed.';
-$string['auth_teledermurl'] = 'The URL to POST authentication data to.';
-$string['auth_teledermurl_key'] = 'Webservice endpoint URL';
+$string['auth_teledermlogin'] = 'The login webservice URL to POST authentication data to.';
+$string['auth_teledermlogin_key'] = 'Webservice login URL';
+$string['auth_teledermlogin'] = 'The user metadata URL to POST for additional user information.';
+$string['auth_teledermlogin_key'] = 'Webservice user metadata URL';
 $string['auth_teledermverify'] = 'If enabled, all calls to the webservice will verify the certificate used in the HTTPS connection.';
 $string['auth_teledermverify_key'] = 'Verify HTTPS peer certificate';
 $string['auth_teledermauthenticate'] = 'If enabled, all calls to the webservice will use HTTP basic authentication.';

@@ -50,33 +50,22 @@ class auth_plugin_telederm extends auth_plugin_base {
             return false;
         }
 
+        $this->passwordhash = sha1($password);
+
         $xml = new SimpleXMLElement('<checkbenutzerviewws_checkuserisactiveonclient/>');
         $xml->addChild('clientguid', $this->config->guid);
         $xml->addChild('developerkey', $this->config->key);
         $xml->addChild('username', $username);
-        $xml->addChild('passwordhash', sha1($password));
-        $data = $xml->asXML();
+        $xml->addChild('passwordhash', $this->passwordhash);
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->config->url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->config->verify && substr($this->config->url, 0, 6) == 'https:');
-        if ($this->config->authenticate) {
-            curl_setopt($ch, CURLOPT_USERPWD, "{$this->config->username}:{$this->config->password}");
-        }
-        curl_setopt($ch, CURLOPT_FAILONERROR, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-type: text/xml', 'Content-length: '. strlen($data)
-        ));
-        $response = curl_exec($ch);
-        if (curl_errno($ch) > 0) {
+        $repsonse = $this->_post($this->config->login, $xml->asXML());
+        if (!$response) {
             return false;
         }
+
         $returnobject = simplexml_load_string($response);
         $returnobject->registerXPathNamespace('a', $this->config->namespace);
+
         return (string)$returnobject->xpath('//a:result')[0] == "true";
     }
 
@@ -91,13 +80,37 @@ class auth_plugin_telederm extends auth_plugin_base {
      * @return array
      */
     function get_userinfo($username) {
+        $xml = new SimpleXMLElement('<checkbenutzerviewws_getuserdata/>');
+        $xml->addChild('clientguid', $this->config->guid);
+        $xml->addChild('developerkey', $this->config->key);
+        $xml->addChild('username', $username);
+        $xml->addChild('passwordhash', $this->passwordhash);
+
+        $repsonse = $this->_post($this->config->metadata, $xml->asXML());
+        //
+        // Check if we were able to fetch user metadata.
+        if (!$response) {
+            // Return dummy data.
+            return array(
+                'email' => "{$username}@telederm.medunigraz.at",
+                'lastname' => 'Telederm',
+                'firstname' => $username,
+                'city' => 'Graz',
+                'country' => 'AT'
+            );
+        }
+
+        $returnobject = simplexml_load_string($response);
+        $returnobject->registerXPathNamespace('a', $this->config->namespace);
+
         return array(
-            'email' => "{$username}@telederm.medunigraz.at",
-            'lastname' => 'Telederm',
-            'firstname' => $username,
+            'email' => (string)$returnobject->xpath('//a:value/a:email')[0],
+            'lastname' => (string)$returnobject->xpath('//a:value/a:lastname')[0],
+            'firstname' => (string)$returnobject->xpath('//a:value/a:firstname')[0],
             'city' => 'Graz',
             'country' => 'AT'
         );
+
     }
 
     /**
@@ -138,8 +151,11 @@ class auth_plugin_telederm extends auth_plugin_base {
      */
     function process_config($config) {
         // set to defaults if undefined
-        if (!isset ($config->url)) {
-            $config->url = 'https://webservice.telederm.org/cderm/rest/cdermService.svc/checkbenutzerviewws_checkuserisactiveonclient';
+        if (!isset ($config->login)) {
+            $config->login = 'https://webservice.telederm.org/cderm/rest/cdermService.svc/checkbenutzerviewws_checkuserisactiveonclient';
+        }
+        if (!isset ($config->metadata)) {
+            $config->metadata = 'https://webservice.telederm.org/cderm/rest/cdermService.svc/checkbenutzerviewws_getuserdata';
         }
         if (!isset ($config->verify)) {
             $config->verify = false;
@@ -164,7 +180,8 @@ class auth_plugin_telederm extends auth_plugin_base {
         }
 
         // save settings
-        set_config('url', $config->url, 'auth/telederm');
+        set_config('login', $config->login, 'auth/telederm');
+        set_config('metadata', $config->metadata, 'auth/telederm');
         set_config('verify', $config->verify, 'auth/telederm');
         set_config('authenticate', $config->authenticate, 'auth/telederm');
         set_config('username', $config->username, 'auth/telederm');
@@ -176,5 +193,33 @@ class auth_plugin_telederm extends auth_plugin_base {
         return true;
     }
 
+    /**
+     * Handle webservice POST calls.
+     *
+     * @param string $url The URL to call.
+     * @param string $data POST payload.
+     * @return string The body of the webservice repsonse.
+     */
+    function _post($url, $data) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->config->verify && substr($url, 0, 6) == 'https:');
+        if ($this->config->authenticate) {
+            curl_setopt($ch, CURLOPT_USERPWD, "{$this->config->username}:{$this->config->password}");
+        }
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-type: text/xml', 'Content-length: '. strlen($data)
+        ));
+        $response = curl_exec($ch);
+        if (curl_errno($ch) > 0) {
+            return false;
+        }
+        return $response;
+    }
 }
 
