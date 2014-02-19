@@ -45,20 +45,22 @@ class auth_plugin_telederm extends auth_plugin_base {
      * @return bool Authentication success or failure.
      */
     function user_login ($username, $password) {
+        global $SESSION;
+
         if (! function_exists('curl_init')) {
             print_error('auth_teledermnotinstalled','mnet');
             return false;
         }
 
-        $this->passwordhash = sha1($password);
+        $SESSION->telederm_passwordhash = sha1($password);
 
         $xml = new SimpleXMLElement('<checkbenutzerviewws_checkuserisactiveonclient/>');
         $xml->addChild('clientguid', $this->config->guid);
         $xml->addChild('developerkey', $this->config->key);
         $xml->addChild('username', $username);
-        $xml->addChild('passwordhash', $this->passwordhash);
+        $xml->addChild('passwordhash', $SESSION->telederm_passwordhash);
 
-        $repsonse = $this->_post($this->config->login, $xml->asXML());
+        $response = $this->_post($this->config->login, $xml->asXML());
         if (!$response) {
             return false;
         }
@@ -80,13 +82,17 @@ class auth_plugin_telederm extends auth_plugin_base {
      * @return array
      */
     function get_userinfo($username) {
+        global $SESSION;
+
         $xml = new SimpleXMLElement('<checkbenutzerviewws_getuserdata/>');
         $xml->addChild('clientguid', $this->config->guid);
         $xml->addChild('developerkey', $this->config->key);
         $xml->addChild('username', $username);
-        $xml->addChild('passwordhash', $this->passwordhash);
+        $xml->addChild('passwordhash', $SESSION->telederm_passwordhash);
 
-        $repsonse = $this->_post($this->config->metadata, $xml->asXML());
+        unset($SESSION->telederm_passwordhash);
+
+        $response = $this->_post($this->config->metadata, $xml->asXML());
         //
         // Check if we were able to fetch user metadata.
         if (!$response) {
