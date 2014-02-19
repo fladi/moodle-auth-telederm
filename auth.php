@@ -76,7 +76,8 @@ class auth_plugin_telederm extends auth_plugin_base {
             return false;
         }
         $returnobject = simplexml_load_string($response);
-        return $returnobject->result == 'true';
+        $returnobject->registerXPathNamespace('a', 'http://WcfServices.ViewWS');
+        return (string)$returnobject->xpath('//a:result')[0] == "true";
     }
 
     function prevent_local_passwords() {
