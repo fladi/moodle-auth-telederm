@@ -39,4 +39,6 @@ $string['auth_teledermguid'] = 'The client GUID to identify the client or whom u
 $string['auth_teledermguid_key'] = 'Client GUID';
 $string['auth_teledermkey'] = 'The developer key to use in each webservice request.';
 $string['auth_teledermkey_key'] = 'Developer key';
+$string['auth_teledermnamespace'] = 'The XML namespace in which to look for the &lt;result&gt; element.';
+$string['auth_teledermnamespace_key'] = 'Result XML namespace';
 $string['pluginname'] = 'TeleDerm authentication';

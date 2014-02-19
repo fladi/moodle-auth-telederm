@@ -76,7 +76,7 @@ class auth_plugin_telederm extends auth_plugin_base {
             return false;
         }
         $returnobject = simplexml_load_string($response);
-        $returnobject->registerXPathNamespace('a', 'http://WcfServices.ViewWS');
+        $returnobject->registerXPathNamespace('a', $this->config->namespace);
         return (string)$returnobject->xpath('//a:result')[0] == "true";
     }
 
@@ -159,6 +159,9 @@ class auth_plugin_telederm extends auth_plugin_base {
         if (!isset ($config->key)) {
             $config->key = '';
         }
+        if (!isset ($config->namespace)) {
+            $config->namespace = 'http://schemas.datacontract.org/2004/07/tootbox_net.commons.ViewWS';
+        }
 
         // save settings
         set_config('url', $config->url, 'auth/telederm');
@@ -168,6 +171,7 @@ class auth_plugin_telederm extends auth_plugin_base {
         set_config('password', $config->password, 'auth/telederm');
         set_config('guid', $config->guid, 'auth/telederm');
         set_config('key', $config->key, 'auth/telederm');
+        set_config('namespace', $config->namespace, 'auth/telederm');
 
         return true;
     }

@@ -21,6 +21,9 @@ if (!isset($config->guid)) {
 if (!isset($config->key)) {
     $config->key = '';
 }
+if (!isset($config->namespace)) {
+    $config->namespace = 'http://schemas.datacontract.org/2004/07/tootbox_net.commons.ViewWS';
+}
 ?>
 <table cellspacing="0" cellpadding="5" border="0">
   <tr valign="top" class="required">
@@ -119,6 +122,20 @@ if (!isset($config->key)) {
     </td>
     <td>
       <?php print_string('auth_teledermkey', 'auth_telederm'); ?>
+    </td>
+  </tr>
+  <tr valign="top" class="required">
+    <td align="right">
+      <label for="namespace">
+        <?php print_string('auth_teledermnamespace_key', 'auth_telederm') ?>:
+      </label>
+    </td>
+    <td>
+      <input name="namespace" id="namespace" type="text" size="30" value="<?php echo $config->namespace ?>" />
+      <?php if (isset($err['namespace'])) { echo $OUTPUT->error_text($err['namespace']); } ?>
+    </td>
+    <td>
+      <?php print_string('auth_teledermnamespace', 'auth_telederm'); ?>
     </td>
   </tr>
   <?php print_auth_lock_options($this->authtype, $user_fields, get_string('auth_fieldlocks_help', 'auth'), false, false); ?>
