@@ -47,6 +47,11 @@ class auth_plugin_telederm extends auth_plugin_base {
     function user_login ($username, $password) {
         global $SESSION;
 
+        /* Check if this user is a telederm one. */
+        if (! substr($username, 0, strlen($this->config->prefix)) === $this->config->prefix) {
+          return false;
+        }
+
         if (! function_exists('curl_init')) {
             print_error('auth_teledermnotinstalled','mnet');
             return false;
@@ -181,6 +186,9 @@ class auth_plugin_telederm extends auth_plugin_base {
         if (!isset ($config->key)) {
             $config->key = '';
         }
+        if (!isset ($config->prefix)) {
+            $config->key = '_dld_';
+        }
         if (!isset ($config->namespace)) {
             $config->namespace = 'http://schemas.datacontract.org/2004/07/tootbox_net.commons.ViewWS';
         }
@@ -194,6 +202,7 @@ class auth_plugin_telederm extends auth_plugin_base {
         set_config('password', $config->password, 'auth/telederm');
         set_config('guid', $config->guid, 'auth/telederm');
         set_config('key', $config->key, 'auth/telederm');
+        set_config('prefix', $config->prefix, 'auth/telederm');
         set_config('namespace', $config->namespace, 'auth/telederm');
 
         return true;

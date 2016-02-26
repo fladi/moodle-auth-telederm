@@ -24,6 +24,9 @@ if (!isset($config->guid)) {
 if (!isset($config->key)) {
     $config->key = '';
 }
+if (!isset($config->prefix)) {
+    $config->prefix = '_dld_';
+}
 if (!isset($config->namespace)) {
     $config->namespace = 'http://schemas.datacontract.org/2004/07/tootbox_net.commons.ViewWS';
 }
@@ -139,6 +142,20 @@ if (!isset($config->namespace)) {
     </td>
     <td>
       <?php print_string('auth_teledermkey', 'auth_telederm'); ?>
+    </td>
+  </tr>
+  <tr valign="top">
+    <td align="right">
+      <label for="prefix">
+        <?php print_string('auth_teledermprefix_key', 'auth_telederm') ?>:
+      </label>
+    </td>
+    <td>
+      <input name="prefix" id="prefix" type="text" size="30" value="<?php echo $config->prefix ?>" />
+      <?php if (isset($err['prefix'])) { echo $OUTPUT->error_text($err['prefix']); } ?>
+    </td>
+    <td>
+      <?php print_string('auth_teledermprefix', 'auth_telederm'); ?>
     </td>
   </tr>
   <tr valign="top" class="required">
