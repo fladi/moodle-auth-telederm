@@ -26,7 +26,7 @@ class auth_plugin_telederm extends auth_plugin_base {
     /**
      * Constructor.
      */
-    function auth_plugin_telederm() {
+    function __construct() {
         $this->authtype = 'telederm';
         $this->config = get_config('auth/telederm');
         $this->config->field_updatelocal_email = false;
